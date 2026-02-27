@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{C8D5ECB8-8726-47A7-B5C5-1EC63130D94F}") = "ObBook.Core", "ObBook.Core\ObBook.Core.vcxproj", "{53895CCE-8096-4334-8A77-8A874B777A54}"
+EndProject
+Project("{C8D5ECB8-8726-47A7-B5C5-1EC63130D94F}") = "ObBook.RenderD2D", "ObBook.RenderD2D\ObBook.RenderD2D.vcxproj", "{022CE49F-1302-4C04-9FE0-C7950FE2CE5E}"
+EndProject
+Project("{C8D5ECB8-8726-47A7-B5C5-1EC63130D94F}") = "ObBook.Bridge", "ObBook.Bridge\ObBook.Bridge.vcxproj", "{B9B424BB-8977-4CE3-ACD0-3B1D7AB5F538}"
+EndProject
+Project("{66D848ED-7125-4371-B284-5B935AEC3608}") = "ObBook.App", "ObBook.App\ObBook.App.csproj", "{2B66BC9D-AB06-4863-BEA2-9E4794D769EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53895CCE-8096-4334-8A77-8A874B777A54}.Debug|x64.ActiveCfg = Debug|x64
+		{53895CCE-8096-4334-8A77-8A874B777A54}.Debug|x64.Build.0 = Debug|x64
+		{53895CCE-8096-4334-8A77-8A874B777A54}.Release|x64.ActiveCfg = Release|x64
+		{53895CCE-8096-4334-8A77-8A874B777A54}.Release|x64.Build.0 = Release|x64
+
+		{022CE49F-1302-4C04-9FE0-C7950FE2CE5E}.Debug|x64.ActiveCfg = Debug|x64
+		{022CE49F-1302-4C04-9FE0-C7950FE2CE5E}.Debug|x64.Build.0 = Debug|x64
+		{022CE49F-1302-4C04-9FE0-C7950FE2CE5E}.Release|x64.ActiveCfg = Release|x64
+		{022CE49F-1302-4C04-9FE0-C7950FE2CE5E}.Release|x64.Build.0 = Release|x64
+
+		{B9B424BB-8977-4CE3-ACD0-3B1D7AB5F538}.Debug|x64.ActiveCfg = Debug|x64
+		{B9B424BB-8977-4CE3-ACD0-3B1D7AB5F538}.Debug|x64.Build.0 = Debug|x64
+		{B9B424BB-8977-4CE3-ACD0-3B1D7AB5F538}.Release|x64.ActiveCfg = Release|x64
+		{B9B424BB-8977-4CE3-ACD0-3B1D7AB5F538}.Release|x64.Build.0 = Release|x64
+
+		{2B66BC9D-AB06-4863-BEA2-9E4794D769EC}.Debug|x64.ActiveCfg = Debug|x64
+		{2B66BC9D-AB06-4863-BEA2-9E4794D769EC}.Debug|x64.Build.0 = Debug|x64
+		{2B66BC9D-AB06-4863-BEA2-9E4794D769EC}.Release|x64.ActiveCfg = Release|x64
+		{2B66BC9D-AB06-4863-BEA2-9E4794D769EC}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
