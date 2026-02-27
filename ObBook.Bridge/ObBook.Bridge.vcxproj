@@ -79,6 +79,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ObBook.Core\ObBook.Core.vcxproj">
       <Project>{53895CCE-8096-4334-8A77-8A874B777A54}</Project>
     </ProjectReference>
