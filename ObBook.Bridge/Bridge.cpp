@@ -1,26 +1,36 @@
-#include "Bridge.h"
-
 #include <msclr/marshal_cppstd.h>
 #include <vector>
 #include <string>
 
 #include "../ObBook.Core/ObBookCore.h"
 #include "../ObBook.RenderD2D/ObBookRenderD2D.h"
+#include "Bridge.h"
 
 using namespace msclr::interop;
 
-class ObBook::Engine::Impl
+class ObBook::EngineImpl
 {
 public:
     obbook::BookCompiler compiler{};
 };
 
 ObBook::Engine::Engine()
+    : impl_(new EngineImpl())
 {
-    impl_ = new Impl();
 }
 
-void ObBook::Engine::SetSourceText(String^ text)
+ObBook::Engine::~Engine()
+{
+    this->!Engine();
+}
+
+ObBook::Engine::!Engine()
+{
+    delete impl_;
+    impl_ = nullptr;
+}
+
+void ObBook::Engine::SetSourceText(System::String^ text)
 {
     if (!text) text = "";
     std::string utf8 = marshal_as<std::string>(text);
@@ -32,33 +42,33 @@ void ObBook::Engine::Compile()
     impl_->compiler.Compile();
 }
 
-String^ ObBook::Engine::NormalizedText::get()
+System::String^ ObBook::Engine::NormalizedText::get()
 {
-    return marshal_as<String^>(impl_->compiler.GetNormalizedSourceUtf8());
+    return marshal_as<System::String^>(impl_->compiler.GetNormalizedSourceUtf8());
 }
 
-String^ ObBook::Engine::ExportDescText::get()
+System::String^ ObBook::Engine::ExportDescText::get()
 {
-    return marshal_as<String^>(impl_->compiler.ExportDescUtf8());
+    return marshal_as<System::String^>(impl_->compiler.ExportDescUtf8());
 }
 
 System::Collections::Generic::List<ObBook::Diagnostic^>^ ObBook::Engine::GetDiagnostics()
 {
-    auto list = gcnew List<Diagnostic^>();
+    auto list = gcnew System::Collections::Generic::List<Diagnostic^>();
     const auto& diags = impl_->compiler.GetDiagnostics();
     for (const auto& d : diags)
     {
         auto m = gcnew Diagnostic();
-        m->SeverityLevel = static_cast<Severity>(static_cast<Byte>(d.severity));
-        m->Offset = static_cast<Int32>(d.offset);
-        m->Length = static_cast<Int32>(d.length);
-        m->Message = marshal_as<String^>(d.message);
+        m->SeverityLevel = static_cast<Severity>(static_cast<System::Byte>(d.severity));
+        m->Offset = static_cast<System::Int32>(d.offset);
+        m->Length = static_cast<System::Int32>(d.length);
+        m->Message = marshal_as<System::String^>(d.message);
         list->Add(m);
     }
     return list;
 }
 
-BitmapSource^ ObBook::Engine::RenderPreviewPage(Int32 width, Int32 height, Single dpi)
+System::Windows::Media::Imaging::BitmapSource^ ObBook::Engine::RenderPreviewPage(System::Int32 width, System::Int32 height, float dpi)
 {
     if (width <= 0) width = 1024;
     if (height <= 0) height = 768;
@@ -72,14 +82,20 @@ BitmapSource^ ObBook::Engine::RenderPreviewPage(Int32 width, Int32 height, Singl
     std::vector<uint8_t> bgra;
     std::string err;
     if (!obbook::RenderStubBgra(p, bgra, err))
-        throw gcnew InvalidOperationException(marshal_as<String^>(err));
+        throw gcnew System::InvalidOperationException(marshal_as<System::String^>(err));
 
     const int stride = width * 4;
-    return BitmapSource::Create(
+    auto pixels = gcnew array<System::Byte>(static_cast<int>(bgra.size()));
+    System::Runtime::InteropServices::Marshal::Copy(
+        static_cast<System::IntPtr>(static_cast<void*>(bgra.data())),
+        pixels,
+        0,
+        pixels->Length);
+
+    return System::Windows::Media::Imaging::BitmapSource::Create(
         width, height, dpi, dpi,
         System::Windows::Media::PixelFormats::Bgra32,
         nullptr,
-        ([&](){ auto a = gcnew array<Byte>(static_cast<int>(bgra.size())); System::Runtime::InteropServices::Marshal::Copy((IntPtr)(void*)bgra.data(), a, 0, a->Length); return a; })(),
-        stride
-    );
+        pixels,
+        stride);
 }
