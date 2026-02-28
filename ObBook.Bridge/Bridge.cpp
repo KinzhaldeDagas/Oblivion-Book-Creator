@@ -110,7 +110,11 @@ System::Windows::Media::Imaging::BitmapSource^ ObBook::Engine::RenderPreviewPage
 
     std::vector<uint8_t> bgra;
     std::string err;
-    if (!obbook::RenderStubBgra(p, bgra, err))
+    const auto source = impl_->compiler.GetNormalizedSourceUtf8().empty()
+        ? impl_->compiler.GetSourceUtf8()
+        : impl_->compiler.GetNormalizedSourceUtf8();
+
+    if (!obbook::RenderPreviewBgra(p, source, bgra, err))
         throw gcnew System::InvalidOperationException(marshal_as<System::String^>(err));
 
     const int stride = width * 4;

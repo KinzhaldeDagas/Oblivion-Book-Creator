@@ -50,7 +50,8 @@
                      TextWrapping="NoWrap"
                      AllowDrop="True"
                      PreviewDragOver="TxtSource_PreviewDragOver"
-                     Drop="TxtSource_Drop"/>
+                     Drop="TxtSource_Drop"
+                     TextChanged="TxtSource_TextChanged"/>
         </DockPanel>
 
         <Border Grid.Column="3" Background="#22000000"/>

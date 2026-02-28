@@ -15,6 +15,7 @@ namespace ObBook.App
     {
         private readonly ObBook.Engine _engine = new ObBook.Engine();
         private Point _treeDragStart;
+        private bool _isUpdatingSource;
 
         public MainWindow()
         {
@@ -98,7 +99,11 @@ namespace ObBook.App
                 _engine.Compile();
 
                 if (updateSource)
+                {
+                    _isUpdatingSource = true;
                     TxtSource.Text = _engine.NormalizedText;
+                    _isUpdatingSource = false;
+                }
 
                 LstDiags.Items.Clear();
                 var diags = _engine.GetDiagnostics();
@@ -242,6 +247,24 @@ namespace ObBook.App
         {
             e.Effects = e.Data.GetDataPresent(DataFormats.Text) ? DragDropEffects.Copy : DragDropEffects.None;
             e.Handled = true;
+        }
+
+
+        private void TxtSource_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdatingSource) return;
+
+            try
+            {
+                _engine.SetOblivionDirectory(TxtOblivionPath.Text ?? "");
+                _engine.SetSourceText(TxtSource.Text ?? "");
+                _engine.Compile();
+                ImgPreview.Source = _engine.RenderPreviewPage(1000, 700, 96f);
+            }
+            catch
+            {
+                // keep typing responsive; compile button surfaces full errors.
+            }
         }
 
         private void TxtSource_Drop(object sender, System.Windows.DragEventArgs e)
