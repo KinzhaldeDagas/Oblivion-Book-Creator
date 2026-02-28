@@ -13,6 +13,8 @@ namespace ObBook.App
         {
             InitializeComponent();
 
+            _engine.SetOblivionDirectory(Environment.GetEnvironmentVariable("OBLIVION_PATH") ?? "");
+
             TxtSource.Text =
                 "<FONT face=1>\r\n" +
                 "<DIV align=\"center\">OBLIVION BOOK CREATOR</DIV>\r\n" +
