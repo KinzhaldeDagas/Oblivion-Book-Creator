@@ -50,6 +50,26 @@ namespace obbook
         return normalizedPath.rfind("textures/menus/book/fancy_font/", 0) == 0;
     }
 
+
+    static std::string GetEnvironmentVariableUtf8(const char* name)
+    {
+        if (!name || name[0] == '\0') return {};
+
+    #if defined(_MSC_VER)
+        char* value = nullptr;
+        size_t len = 0;
+        if (_dupenv_s(&value, &len, name) != 0 || !value) return {};
+
+        std::string out(value);
+        std::free(value);
+        return out;
+    #else
+        const char* value = std::getenv(name);
+        if (!value) return {};
+        return std::string(value);
+    #endif
+    }
+
     static std::string ReadBsaZString(std::ifstream& in)
     {
         std::string out;
@@ -305,10 +325,9 @@ namespace obbook
         if (!settings_.oblivionDirectoryUtf8.empty())
             candidates.emplace_back(fs::path(settings_.oblivionDirectoryUtf8));
 
-        if (const char* envPath = std::getenv("OBLIVION_PATH"))
-        {
-            if (envPath[0] != '\0') candidates.emplace_back(fs::path(envPath));
-        }
+        const std::string envPath = GetEnvironmentVariableUtf8("OBLIVION_PATH");
+        if (!envPath.empty())
+            candidates.emplace_back(fs::path(envPath));
 
         for (const auto& c : candidates)
         {
