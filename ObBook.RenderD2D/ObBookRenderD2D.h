@@ -12,7 +12,7 @@ namespace obbook
         float dpi = 96.0f;
     };
 
-    // v1 stub: returns a BGRA8 buffer.
-    // Later: consume PageModel output and draw real glyph runs + images.
-    bool RenderStubBgra(const RenderParams& p, std::vector<uint8_t>& outBgra, std::string& outError);
+    // Renders a preview BGRA8 buffer from compiled/normalized markup-like source.
+    // Attempts a Direct3D9 path first and falls back to software rendering.
+    bool RenderPreviewBgra(const RenderParams& p, const std::string& sourceUtf8, std::vector<uint8_t>& outBgra, std::string& outError);
 }
