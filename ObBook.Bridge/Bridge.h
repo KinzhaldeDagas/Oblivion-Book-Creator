@@ -23,12 +23,16 @@ namespace ObBook
         !Engine();
 
         void SetSourceText(System::String^ text);
+        void SetOblivionDirectory(System::String^ path);
         void Compile();
 
         property System::String^ NormalizedText { System::String^ get(); }
         property System::String^ ExportDescText { System::String^ get(); }
+        property System::String^ ResolvedDataDirectory { System::String^ get(); }
 
         System::Collections::Generic::List<Diagnostic^>^ GetDiagnostics();
+        System::Collections::Generic::List<System::String^>^ GetBookFontAssets();
+        System::Collections::Generic::List<System::String^>^ GetBookTextureAssets();
 
         // v1 preview plumbing: returns a BitmapSource for a stub page.
         System::Windows::Media::Imaging::BitmapSource^ RenderPreviewPage(System::Int32 width, System::Int32 height, float dpi);
