@@ -37,6 +37,12 @@ void ObBook::Engine::SetSourceText(System::String^ text)
     impl_->compiler.SetSourceUtf8(utf8);
 }
 
+void ObBook::Engine::SetOblivionDirectory(System::String^ path)
+{
+    if (!path) path = "";
+    impl_->compiler.SetOblivionDirectoryUtf8(marshal_as<std::string>(path));
+}
+
 void ObBook::Engine::Compile()
 {
     impl_->compiler.Compile();
@@ -52,6 +58,11 @@ System::String^ ObBook::Engine::ExportDescText::get()
     return marshal_as<System::String^>(impl_->compiler.ExportDescUtf8());
 }
 
+System::String^ ObBook::Engine::ResolvedDataDirectory::get()
+{
+    return marshal_as<System::String^>(impl_->compiler.GetResolvedDataDirectoryUtf8());
+}
+
 System::Collections::Generic::List<ObBook::Diagnostic^>^ ObBook::Engine::GetDiagnostics()
 {
     auto list = gcnew System::Collections::Generic::List<Diagnostic^>();
@@ -65,6 +76,24 @@ System::Collections::Generic::List<ObBook::Diagnostic^>^ ObBook::Engine::GetDiag
         m->Message = marshal_as<System::String^>(d.message);
         list->Add(m);
     }
+    return list;
+}
+
+System::Collections::Generic::List<System::String^>^ ObBook::Engine::GetBookFontAssets()
+{
+    auto list = gcnew System::Collections::Generic::List<System::String^>();
+    const auto& assets = impl_->compiler.GetBookFontAssetsUtf8();
+    for (const auto& a : assets)
+        list->Add(marshal_as<System::String^>(a));
+    return list;
+}
+
+System::Collections::Generic::List<System::String^>^ ObBook::Engine::GetBookTextureAssets()
+{
+    auto list = gcnew System::Collections::Generic::List<System::String^>();
+    const auto& assets = impl_->compiler.GetBookTextureAssetsUtf8();
+    for (const auto& a : assets)
+        list->Add(marshal_as<System::String^>(a));
     return list;
 }
 
