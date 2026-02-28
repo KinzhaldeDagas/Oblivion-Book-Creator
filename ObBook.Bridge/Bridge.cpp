@@ -299,7 +299,7 @@ namespace
         const uint32_t pfFlags = rd32(76);
         const uint32_t fourCC = rd32(80);
         const uint32_t rgbBits = rd32(84);
-        const uint32_t rMask = rd32(88), gMask = rd32(92), bMask = rd32(96), aMask = rd32(100);
+        const uint32_t rMask = rd32(88), gMask = rd32(92), bMask = rd32(96);
         const uint8_t* data = dds.data() + 128;
         const size_t size = dds.size() - 128;
 
@@ -320,9 +320,14 @@ namespace
         if (dst.empty() || src.empty() || dw==0 || dh==0 || sw==0 || sh==0) return;
         const uint32_t maxW = dw / 2;
         const uint32_t maxH = dh / 2;
-        float scale = std::min(1.0f, std::min(maxW / static_cast<float>(sw), maxH / static_cast<float>(sh)));
-        uint32_t tw = std::max(1u, static_cast<uint32_t>(sw * scale));
-        uint32_t th = std::max(1u, static_cast<uint32_t>(sh * scale));
+        const float scaleW = maxW / static_cast<float>(sw);
+        const float scaleH = maxH / static_cast<float>(sh);
+        float scale = (scaleW < scaleH) ? scaleW : scaleH;
+        if (scale > 1.0f) scale = 1.0f;
+        uint32_t tw = static_cast<uint32_t>(sw * scale);
+        uint32_t th = static_cast<uint32_t>(sh * scale);
+        if (tw == 0) tw = 1;
+        if (th == 0) th = 1;
         uint32_t ox = (dw > tw) ? (dw - tw)/2 : 0;
         uint32_t oy = 120;
         if (oy + th > dh) oy = (dh > th) ? dh - th : 0;
